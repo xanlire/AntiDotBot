@@ -1,7 +1,25 @@
+import java.util.HashMap;
+import java.util.Map;
+
 import methods.*;
+import model.view.Command;
+import model.view.CommandKey;
+
 import org.telegram.telegrambots.api.objects.Update;
 
 public class FactoryController {
+
+    private Map<CommandKey, Factory> commands = new HashMap<>();
+
+    {
+        commands.put(CommandKey.KICK, new KickUserFactory());
+        commands.put(CommandKey.NO_KICK, new KickUserFactory());
+        commands.put(CommandKey.NEWS, new BreakingNewsFactory());
+        commands.put(CommandKey.SAY, new AdminFactory());
+        commands.put(CommandKey.KARMA, new MyKarmaFactory());
+        commands.put(CommandKey.TOP, new GetTop10CommandFactory());
+    }
+
 
     private static final String[] wrongs = {
             "заебали бля",
@@ -68,25 +86,15 @@ public class FactoryController {
         }
 
         if(message != null) {
-            if(message.startsWith("/kick") || message.startsWith("/nokick")) {
-                factory = new KickUserFactory();
-            } else if(message.startsWith("#сводка")
-                    && (update.getMessage().getFrom().getId() == 256574830
-                        || update.getMessage().getFrom().getId() == 302376441
-                        || update.getMessage().getFrom().getId() == 295900585)) {
-                factory = new BreakingNewsFactory();
-            } else if (message.startsWith("/karma")) {
-                factory = new MyKarmaFactory();
-            } else if (message.startsWith("/say")
-                    && (update.getMessage().getChatId().equals(295900585L) || update.getMessage().getChatId().equals(313483266L))) {
-                factory = new AdminFactory();
-            } else if (message.startsWith("/top10")){
-                factory = new GetTop10CommandFactory();
+
+            if (message.startsWith("/") || message.startsWith("#")) {
+                Command command = getCommand(message);
+                factory = resolveFactory(command.getKey());
             } else if (isMessageInList(message, helloPhrases)) {
                 factory = new SayHelloFactory();
             } else if (isMessageInList(message, wrongs)) {
                 System.out.println("User " + update.getMessage().getFrom().getFirstName()
-                        + " will banned for the text:\n" + message);
+                    + " will banned for the text:\n" + message);
                 factory = new RestrictUserFactory();
             } else if(isMessageInList(message, leraFire)){
                 factory = new LeraFireFactory();
@@ -95,6 +103,15 @@ public class FactoryController {
             }
         }
         return this;
+    }
+
+    private Command getCommand(String message) {
+        String[] parsedMessage = message.split(" ", 2);
+        return new Command(CommandKey.commandFromString(parsedMessage[0]), parsedMessage[1]);
+    }
+
+    private Factory resolveFactory(CommandKey key) {
+        return this.commands.get(key);
     }
 
     private boolean isMessageInList(String message, String[] list){
