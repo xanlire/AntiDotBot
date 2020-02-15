@@ -1,0 +1,19 @@
+group 'AntiDot'
+version '1.0'
+
+apply plugin: 'application'
+
+mainClassName = "AntiParaziteBot"
+sourceCompatibility = 1.8
+
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile "org.telegram:telegrambots:3.5"
+    compile group: 'org.hsqldb', name: 'hsqldb', version: '2.4.0'
+}
