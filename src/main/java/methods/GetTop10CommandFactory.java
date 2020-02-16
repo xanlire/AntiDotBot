@@ -3,7 +3,7 @@ package methods;
 import java.util.*;
 
 import dao.MessageDao;
-import model.view.User;
+import model.user.User;
 import org.telegram.telegrambots.api.methods.BotApiMethod;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
@@ -13,7 +13,7 @@ public class GetTop10CommandFactory implements Factory {
     public BotApiMethod createMethod(Update update) {
         MessageDao messageDao = new MessageDao();
 
-        Set<model.view.User> sortedUsers = new TreeSet<>(messageDao.getTop10());
+        Set<User> sortedUsers = new TreeSet<>(messageDao.getTop10());
 
         StringBuilder builder = new StringBuilder();              
 

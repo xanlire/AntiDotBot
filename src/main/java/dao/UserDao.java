@@ -5,12 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
-
-import javax.jws.soap.SOAPBinding;
 
 import org.telegram.telegrambots.api.objects.User;
 import utils.DBConnector;
@@ -19,12 +15,13 @@ public class UserDao {
     public void save(User user) throws SQLIntegrityConstraintViolationException {
 
         try (PreparedStatement preparedStatement = DBConnector.getConnection()
-                .prepareStatement("INSERT INTO USERS (ID, USERNAME, FIRSTNAME, LASTNAME) VALUES (?, ?, ?, ?)")) {
+                .prepareStatement("INSERT INTO USERS (ID, USERNAME, FIRSTNAME, LASTNAME) VALUES (?, ?, ?, ?, ?)")) {
 
             preparedStatement.setInt(1, user.getId());
             preparedStatement.setString(2, user.getUserName());
             preparedStatement.setString(3, user.getFirstName());
             preparedStatement.setString(4, user.getLastName());
+            preparedStatement.setString(5, "USER");
 
             preparedStatement.execute();
         } catch (SQLIntegrityConstraintViolationException e) {
@@ -50,15 +47,15 @@ public class UserDao {
         }
     }
 
-    public Set<model.view.User> getAll(){
-        Set<model.view.User> userSet = new HashSet<>();
+    public Set<model.user.User> getAll(){
+        Set<model.user.User> userSet = new HashSet<>();
         try(PreparedStatement preparedStatement = DBConnector.getConnection()
                 .prepareStatement("SELECT * FROM USERS")){
 
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()){
-                model.view.User user = new model.view.User();
+                model.user.User user = new model.user.User();
                 user.setId(rs.getInt("ID"));
                 user.setFirstname(rs.getString("FIRSTNAME"));
                 user.setUsername(rs.getString("USERNAME"));

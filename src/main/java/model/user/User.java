@@ -1,4 +1,4 @@
-package model.view;
+package model.user;
 
 
 
@@ -7,6 +7,7 @@ public class User implements Comparable<User> {
     private String username;
     private String firstname;
     private String lastname;
+    private Role role;
     private Integer messageCount;
 
     public Integer getMessageCount() {
@@ -47,6 +48,14 @@ public class User implements Comparable<User> {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override

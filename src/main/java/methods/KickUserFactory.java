@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import dao.BlockDao;
 import dao.UserDao;
-import model.view.User;
+import model.user.User;
 import org.telegram.telegrambots.api.methods.BotApiMethod;
 import org.telegram.telegrambots.api.methods.groupadministration.KickChatMember;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -38,7 +38,7 @@ public class KickUserFactory implements Factory {
         }
 
         UserDao userDao = new UserDao();
-        Set<model.view.User> users = userDao.getAll();
+        Set<User> users = userDao.getAll();
 
         List<User> kickHim = users.stream()
                 .filter(user -> userToKick[0].equals(user.getFirstname()) || userToKick[0].equals(user.getUsername()))

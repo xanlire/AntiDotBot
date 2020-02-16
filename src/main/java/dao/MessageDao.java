@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.telegram.telegrambots.api.objects.Message;
+
+import model.user.User;
 import utils.DBConnector;
 
 public class MessageDao {
@@ -30,8 +32,8 @@ public class MessageDao {
         }
     }
 
-    public Set<model.view.User> getTop10() {
-        Set<model.view.User> topUsers = new HashSet<>();
+    public Set<User> getTop10() {
+        Set<User> topUsers = new HashSet<>();
         try (PreparedStatement preparedStatement = DBConnector.getConnection()
                 .prepareStatement("SELECT U.*, MESS.MESSAGE_CNT FROM USERS U, " +
                         "  (SELECT USER_ID, COUNT(ID) MESSAGE_CNT FROM MESSAGES GROUP BY USER_ID) MESS " +
@@ -39,7 +41,7 @@ public class MessageDao {
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()){
-                model.view.User user = new model.view.User();
+                User user = new User();
 
                 user.setUsername(rs.getString("USERNAME"));
                 user.setFirstname(rs.getString("FIRSTNAME"));

@@ -1,4 +1,4 @@
-package model.view;
+package model;
 
 /**
  * @author Q-DAY

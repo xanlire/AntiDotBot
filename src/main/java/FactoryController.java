@@ -2,8 +2,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import methods.*;
-import model.view.Command;
-import model.view.CommandKey;
+import model.Command;
+import model.CommandKey;
 
 import org.telegram.telegrambots.api.objects.Update;
 

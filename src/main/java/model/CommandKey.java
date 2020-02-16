@@ -1,4 +1,4 @@
-package model.view;
+package model;
 
 import java.util.stream.Stream;
 
